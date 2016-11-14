@@ -4,8 +4,8 @@ import java.util.List;
 
 public class ZkConfigInit {
 	
-	private static List<String> appPaths = null;
-	private static String period;
+	private  List<String> appPaths = null;
+	private  String period;
 	private ConfigPaser paser;
 	
 	public ZkConfigInit(String path) {
@@ -14,11 +14,11 @@ public class ZkConfigInit {
 		period = paser.getProperty("dir_watch_period");
 	}	
 
-	public static List<String> getApps() {
+	public  List<String> getApps() {
 		return appPaths;
 	}
 
-	public static String getPeriod() {
+	public  String getPeriod() {
 		return period;
 	}
 

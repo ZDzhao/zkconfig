@@ -6,23 +6,15 @@ import com.zk.zkconfig.ZkConfigInit;
 public class FileWatch {
 	
 	private boolean isRunning = false;
-	private static long lastModified;
-	private static int period;
-	
-	static {
-		period = 1000*15;//默认十五秒
-		String dwp = ZkConfigInit.getPeriod();
-		if(dwp !=null && !"".equals(dwp.trim())){
-			period = Integer.parseInt(dwp);
-		}
-	}
+	private long lastModified;
+	private int period = 1000*15;	
 	
 	public long getLastModified() {
 		return lastModified;
 	}
 	
 	public void setLastModified(long lastModified) {
-		FileWatch.lastModified = lastModified;
+		this.lastModified = lastModified;
 	}
 	
 	public void watch(String filePath, Monitor client, int period) throws Exception{
@@ -53,12 +45,17 @@ public class FileWatch {
 	public void publishConfig( Monitor client) {
 		client.updateFile();
 	}
-	public void runWatch(final String filePath, final Monitor client){
+	public void runWatch(final String filePath, final Monitor client, final ZkConfigInit configInit){
 		new Thread(new Runnable() {
 			
 			@Override
 			public void run() {
 				try {
+					String dwp = configInit.getPeriod();
+					if(dwp !=null && !"".equals(dwp.trim())){
+						period = Integer.parseInt(dwp);
+					}
+					
 					watch(filePath, client, period);
 				} catch (Exception e) {
 					// TODO 自动生成的 catch 块

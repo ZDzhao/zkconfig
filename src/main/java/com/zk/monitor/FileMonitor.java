@@ -16,7 +16,7 @@ public class FileMonitor implements Monitor {
 
 	@Override
 	public void monitor(CuratorClient store, String Path) {
-		this.init(store, filePath);
+		this.init(store, Path);
 		try {
 			this.initDataToZk();
 		} catch (Exception e) {
@@ -53,7 +53,7 @@ public class FileMonitor implements Monitor {
 			return null;
 		}
 		//example: /zkconfig/***.xml
-		String zkPath = "/" + client.getNamespace() + "/" +  getLastName(filePath);
+		String zkPath =getLastName(filePath);
 		return zkPath;
 	}
 
@@ -66,15 +66,13 @@ public class FileMonitor implements Monitor {
 		if (filePath == null) {
 			return null;
 		}
-		int beginIndex = filePath.lastIndexOf("/");
-		String path = filePath.substring(beginIndex, filePath.length()-1);
+		int beginIndex = filePath.lastIndexOf("\\");
+		String path = filePath.substring(beginIndex, filePath.length());
 		return path;
 	}
 	
 	@Override
 	public void monitorFile() {
-		FileWatch watch = new FileWatch();
-		watch.runWatch(filePath, this);
 		try {
 			client.setNodeCache(zkPath, new NodeListener() {
 				
@@ -95,7 +93,7 @@ public class FileMonitor implements Monitor {
 			FileUtils.writeFile(data, filePath);
 		} catch (Exception e) {
 			// TODO 自动生成的 catch 块
-			e.printStackTrace();
+			e.printStackTrace(); 
 		}		
 	}
 	
